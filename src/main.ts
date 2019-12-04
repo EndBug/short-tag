@@ -20,10 +20,18 @@ async function main() {
   } else return core.info('No tag matching the SemVer regex has been found, no tags have been created.')
 
   if (major) {
-    const child = spawn(`git tag --force -a v${major} -m "Link to version ${match}"`)
-    if (!!token && (!push || push == 'true')) {
-
-    } else if (!token) core.setFailed('Although a match has been found, you requested to push the created tags but didn\'t provide a tokne.')
+    const tagProcess = spawn(`git tag --force -a v${major} -m "Link to version ${match}"`)
+    tagProcess.stdout.on('data', d => console.log(`tag: ${d}`))
+    tagProcess.on('exit', code => {
+      if (code != 0) core.setFailed(`The tag process failed with code ${code}. More info is probably written above.`)
+      if (!!token && (!push || push == 'true')) {
+        const pushProcess = spawn('git push --tags')
+        pushProcess.stdout.on('data', d => console.log(`push: ${d}`))
+        pushProcess.on('exit', code => {
+          if (code != 0) core.setFailed(`The push process failed with code ${code}. More info is probably written above.`)
+        })
+      } else if (!token) core.setFailed('Although a match has been found, you requested to push the created tags but didn\'t provide a token.')
+    })
   }
 }
 
