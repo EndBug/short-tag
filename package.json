@@ -1,7 +1,7 @@
 {
   "name": "short-tag",
   "version": "1.0.0",
-  "description": "GitHub Action to automatically generate a \"short tag\" for your versions",
+  "description": "GitHub Action to automatically generate a \"short tag\" for your releases",
   "main": "lib/main.js",
   "scripts": {
     "build": "npm run compile && npm run compress && rm build/*.js",

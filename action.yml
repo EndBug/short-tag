@@ -1,6 +1,6 @@
 name: Short Tag
 author: Federico Grandi
-description: Creates and updates major version tags
+description: GitHub Action to automatically generate a "short tag" for your releases
 
 inputs: 
   push:
