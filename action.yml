@@ -1,0 +1,19 @@
+name: Short Tag
+author: Federico Grandi
+description: Creates and updates major version tags
+
+inputs: 
+  push:
+    description: Whether to push the tags (true by default)
+    required: false
+  token:
+    description: A GitHub token to use when running on private repos
+    required: false
+
+runs:
+  using: node12
+  main: 'lib/main.js'
+
+branding:
+  icon: tag
+  color: red
