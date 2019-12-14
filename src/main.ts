@@ -6,9 +6,9 @@ import { spawn } from 'child_process';
 
 const token = core.getInput('token'),
   push = core.getInput('push'),
-  eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json'
+  eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json';
 
-async function main() {
+(async function main() {
   const eventObj = await readJson(eventFile),
     tag = (await getTag(eventObj.head)).tag
 
@@ -33,7 +33,7 @@ async function main() {
       } else if (!token) core.setFailed('Although a match has been found, you requested to push the created tags but didn\'t provide a token.')
     })
   }
-}
+})()
 
 async function readJson(file: string) {
   const data: string = await new Promise((resolve, reject) =>
