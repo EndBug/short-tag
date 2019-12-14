@@ -1,4 +1,4 @@
-name: Build & release
+name: Build release
 on:
   push:
     branches:
@@ -20,6 +20,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Commit dependencies
+        uses: EndBug/add-and-commit@v2.1.1
+        with:
+          author_name: Federico Grandi
+          author_email: fgrandi30@gmail.com
+          force: true
+          message: "[auto] Commit dependencies"
+          path: node_modules
+          pattern: "*.*"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Compile TypeScript into compressed JavaScript
         run: npm run build
 
@@ -29,8 +41,8 @@ jobs:
           author_name: Federico Grandi
           author_email: fgrandi30@gmail.com
           force: true
-          message: "[auto] Commit release files"
-          path: "."
-          pattern: "*.*"
+          message: "[auto] Commit compiled files"
+          path: lib
+          pattern: "*.js"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
