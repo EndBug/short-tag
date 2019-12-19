@@ -36,7 +36,7 @@ const client = github.client(token || undefined),
       tagProcess.on('exit', code => {
         if (code != 0) core.setFailed(`The tag process failed with code ${code}. More info is probably written above.`)
         if (!!token && (!push || push == 'true')) {
-          const pushProcess = spawn('git push --tags')
+          const pushProcess = spawn('git', 'push --tags'.split(' '))
           pushProcess.stdout.on('data', d => console.log(`push: ${d}`))
           pushProcess.on('exit', code => {
             if (code != 0) core.setFailed(`The push process failed with code ${code}. More info is probably written above.`)
