@@ -1,12 +1,12 @@
 import * as core from '@actions/core'
 import * as github from 'octonode'
-import semverRegex from 'semver-regex';
-import { readFile } from 'fs';
-import { spawn } from 'child_process';
+import semverRegex from 'semver-regex'
+import { readFile } from 'fs'
+import { spawn } from 'child_process'
 
 const token = core.getInput('token'),
   push = core.getInput('push'),
-  eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json';
+  eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json'
 
 const client = github.client(token || undefined),
   repo = client.repo(process.env.GITHUB_REPOSITORY);
@@ -38,22 +38,19 @@ const client = github.client(token || undefined),
       })
     }
   } catch (e) {
-    core.error(e);
-    core.setFailed(e);
+    core.error(e)
+    core.setFailed(e)
   }
 })()
 
 async function readJson(file: string) {
   const data: string = await new Promise((resolve, reject) =>
     readFile(file, "utf8", (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
+      if (err) reject(err)
+      else resolve(data)
     })
-  );
-  return JSON.parse(data);
+  )
+  return JSON.parse(data)
 }
 
 async function getTag(sha: string): Promise<string | undefined> {
