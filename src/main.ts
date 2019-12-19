@@ -32,12 +32,14 @@ const client = github.client(token || undefined),
 
     if (major) {
       const tagProcess = spawn('git', `tag --force -a v${major} -m "Link to version ${match}"`.split(' '))
-      tagProcess.stdout.on('data', d => console.log(`tag: ${d}`))
+      tagProcess.stdout.on('data', d => core.info('tag: ' + d))
+      tagProcess.stdout.on('error', e => core.error('tag: ' + e))
       tagProcess.on('exit', code => {
         if (code != 0) core.setFailed(`The tag process failed with code ${code}. More info is probably written above.`)
         if (!!token && (!push || push == 'true')) {
           const pushProcess = spawn('git', 'push --tags'.split(' '))
-          pushProcess.stdout.on('data', d => console.log(`push: ${d}`))
+          pushProcess.stdout.on('data', d => core.info('push: ' + d))
+          pushProcess.stdout.on('error', e => core.error('push: ' + e))
           pushProcess.on('exit', code => {
             if (code != 0) core.setFailed(`The push process failed with code ${code}. More info is probably written above.`)
           })
