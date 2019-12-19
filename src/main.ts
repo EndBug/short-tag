@@ -48,7 +48,9 @@ const client = github.client(token || undefined),
     core.error(e)
     core.setFailed(e)
   }
-})()
+})().finally(() => {
+  core.setFailed('Fake problem')
+})
 
 async function readJson(file: string) {
   const data: string = await new Promise((resolve, reject) =>
