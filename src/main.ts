@@ -1,6 +1,6 @@
-import axios from 'axios'
-import semverRegex from 'semver-regex';
 import * as core from '@actions/core'
+import * as github from 'octonode'
+import semverRegex from 'semver-regex';
 import { readFile } from 'fs';
 import { spawn } from 'child_process';
 
@@ -8,10 +8,13 @@ const token = core.getInput('token'),
   push = core.getInput('push'),
   eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json';
 
+const client = github.client(token || undefined),
+  repo = client.repo(process.env.GITHUB_REPOSITORY);
+
 (async function main() {
   try {
     const eventObj = await readJson(eventFile),
-      tag = (await getTag(eventObj.head)).tag
+      tag = await getTag(eventObj.head)
 
     let match = '',
       major = ''
@@ -53,14 +56,19 @@ async function readJson(file: string) {
   return JSON.parse(data);
 }
 
-async function getTag(sha: string): Promise<tagInfo> {
-  const url = `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/tags/${sha}`,
-    headers = token ? {
-      Authorization: `Bearer ${token}`
-    } : undefined
-
-  return (await axios.get(url, { headers }))
+async function getTag(sha: string): Promise<string | undefined> {
+  const tags: tagInfo[] = (await repo.tagsAsync())[0]
+  for (let tag of tags) {
+    if (tag.commit.sha == sha) return tag.name
+  }
 }
 interface tagInfo {
-  tag: string
+  commit: {
+    sha: string
+    url: string
+  }
+  name: string
+  node_id: string
+  tarball_url: string
+  zipball_url: string
 }
