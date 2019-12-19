@@ -31,7 +31,7 @@ const client = github.client(token || undefined),
     } else return core.info('No tag matching the SemVer regex has been found, no tags have been created.')
 
     if (major) {
-      const tagProcess = spawn(`git tag --force -a v${major} -m "Link to version ${match}"`)
+      const tagProcess = spawn('git', `tag --force -a v${major} -m "Link to version ${match}"`.split(' '))
       tagProcess.stdout.on('data', d => console.log(`tag: ${d}`))
       tagProcess.on('exit', code => {
         if (code != 0) core.setFailed(`The tag process failed with code ${code}. More info is probably written above.`)
