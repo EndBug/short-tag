@@ -14,7 +14,14 @@ const client = github.client(token || undefined),
 (async function main() {
   try {
     const eventObj = await readJson(eventFile),
-      tag = await getTag(eventObj.head)
+      tag = eventObj.ref
+
+    if (eventObj.ref_type != 'tag') {
+      core.info('No tag has been added.')
+      return
+    }
+
+    core.info(`Sha: ${eventObj.head}\nTag: ${tag}`)
 
     let match = '',
       major = ''
