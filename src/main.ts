@@ -1,15 +1,11 @@
 import * as core from '@actions/core'
-import * as github from 'octonode'
 import * as shell from 'shelljs'
 import * as path from 'path'
 import semverRegex from 'semver-regex'
 
 const token = core.getInput('token'),
   push = core.getInput('push'),
-  eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json'
-
-const client = github.client(token || undefined),
-  repo = client.repo(process.env.GITHUB_REPOSITORY);
+  eventFile = process.env.GITHUB_EVENT_PATH || '/github/workflow/event.json';
 
 (async function main() {
   try {
@@ -35,8 +31,8 @@ const client = github.client(token || undefined),
     process.env.PARAM_MATCH = match
     process.env.GITHUB_TOKEN = token
 
-    let shouldPush = (!push || push == 'true')
-    if (!!token) process.env.PARAM_PUSH = shouldPush ? 'true' : undefined
+    const shouldPush = (!push || push == 'true')
+    if (token) process.env.PARAM_PUSH = shouldPush ? 'true' : undefined
     else {
       process.env.PARAM_PUSH = undefined
       if (shouldPush) core.warning('You requested to push the tag, but didn\'t provide any token: the tags can\'t be pushed to the repo without one.')
