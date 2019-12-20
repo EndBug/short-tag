@@ -12,8 +12,8 @@ git_setup() {
 EOF
     chmod 600 $HOME/.netrc
 
-    git config --global user.email "$INPUT_AUTHOR_EMAIL"
-    git config --global user.name "$INPUT_AUTHOR_NAME"
+    git config --global user.email "$AUTHOR_EMAIL"
+    git config --global user.name "$AUTHOR_NAME"
 }
 
 git_setup

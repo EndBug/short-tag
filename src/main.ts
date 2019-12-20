@@ -3,7 +3,6 @@ import * as github from 'octonode'
 import * as shell from 'shelljs'
 import * as path from 'path'
 import semverRegex from 'semver-regex'
-import { readFile } from 'fs'
 
 const token = core.getInput('token'),
   push = core.getInput('push'),
@@ -14,7 +13,8 @@ const client = github.client(token || undefined),
 
 (async function main() {
   try {
-    const eventObj = await readJson(eventFile),
+    const eventObj = require(eventFile),
+      { author } = eventObj.head_commit,
       tag = eventObj.ref
 
     if (eventObj.ref_type != 'tag') {
@@ -35,6 +35,8 @@ const client = github.client(token || undefined),
     process.env.PARAM_MAJOR = major
     process.env.PARAM_MATCH = match
     process.env.GITHUB_TOKEN = token
+    process.env.AUTHOR_NAME = author.name
+    process.env.AUTHOR_EMAIL = author.email
 
     let shouldPush = (!push || push == 'true')
     if (!!token) process.env.PARAM_PUSH = shouldPush ? 'true' : undefined
@@ -51,30 +53,3 @@ const client = github.client(token || undefined),
 })().finally(() => {
   core.setFailed('Fake problem')
 })
-
-async function readJson(file: string) {
-  const data: string = await new Promise((resolve, reject) =>
-    readFile(file, "utf8", (err, data) => {
-      if (err) reject(err)
-      else resolve(data)
-    })
-  )
-  return JSON.parse(data)
-}
-
-async function getTag(sha: string): Promise<string | undefined> {
-  const tags: tagInfo[] = (await repo.tagsAsync())[0]
-  for (let tag of tags) {
-    if (tag.commit.sha == sha) return tag.name
-  }
-}
-interface tagInfo {
-  commit: {
-    sha: string
-    url: string
-  }
-  name: string
-  node_id: string
-  tarball_url: string
-  zipball_url: string
-}
