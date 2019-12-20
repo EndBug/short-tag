@@ -1,0 +1,15 @@
+name: Short tag
+on: create
+
+jobs:
+  tag:
+    name: Update short tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+
+      - name: Run short-tag
+        uses: EndBug/short-tag@dist
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
