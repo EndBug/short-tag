@@ -47,6 +47,4 @@ const client = github.client(token || undefined),
   } catch (e) {
     core.setFailed(e)
   }
-})().finally(() => {
-  core.setFailed('Fake problem')
-})
+})()
