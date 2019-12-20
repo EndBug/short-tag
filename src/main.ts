@@ -34,12 +34,13 @@ const client = github.client(token || undefined),
 
     process.env.PARAM_MAJOR = major
     process.env.PARAM_MATCH = match
+    process.env.GITHUB_TOKEN = token
 
     let shouldPush = (!push || push == 'true')
     if (!!token) process.env.PARAM_PUSH = shouldPush ? 'true' : undefined
     else {
       process.env.PARAM_PUSH = undefined
-      if (shouldPush) core.warning('You requested to push the tag, but didn\'t provide any token: the tags can\'t be pushedto the repo without one.')
+      if (shouldPush) core.warning('You requested to push the tag, but didn\'t provide any token: the tags can\'t be pushed to the repo without one.')
     }
 
     core.info(`Starting start script with the following parameters: [${major}, ${match}, ${process.env.PARAM_PUSH}]`)
