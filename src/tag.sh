@@ -24,7 +24,7 @@ git tag --force -a "v$PARAM_MAJOR" -m "Link to version $PARAM_MATCH"
 if $PARAM_PUSH
 then
   echo "Pushing to repo..."
-  git push --tags --force"
+  git push --tags --force
 else
   echo "Not pushing to repo."
 fi
