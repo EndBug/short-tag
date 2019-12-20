@@ -14,7 +14,6 @@ const client = github.client(token || undefined),
 (async function main() {
   try {
     const eventObj = require(eventFile),
-      { author } = eventObj.head_commit,
       tag = eventObj.ref
 
     if (eventObj.ref_type != 'tag') {
