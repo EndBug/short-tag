@@ -16,6 +16,8 @@ EOF
     git config --global user.name "$INPUT_AUTHOR_NAME"
 }
 
+git_setup
+
 echo "Tagging commit..."
 git tag --force -a "v$PARAM_MAJOR" -m "Link to version $PARAM_MATCH"
 
