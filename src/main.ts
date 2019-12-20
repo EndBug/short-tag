@@ -35,8 +35,6 @@ const client = github.client(token || undefined),
     process.env.PARAM_MAJOR = major
     process.env.PARAM_MATCH = match
     process.env.GITHUB_TOKEN = token
-    process.env.AUTHOR_NAME = author.name
-    process.env.AUTHOR_EMAIL = author.email
 
     let shouldPush = (!push || push == 'true')
     if (!!token) process.env.PARAM_PUSH = shouldPush ? 'true' : undefined
